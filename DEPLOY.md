@@ -2,8 +2,8 @@
 
 把每日 AI 简报变成一个**固定网址**，手机书签后每天打开都是最新一期 + 全部历史。
 
-> 说明：WorkBuddy 的沙箱环境禁止写入 `~/.ssh` 且无法替你登录 GitHub，
-> 因此「生成密钥 / 登录 GitHub / 建仓库」这几步需要你在**自己电脑的终端**里完成。
+> 说明：WorkBuddy 的沙箱环境禁止写入 `~/.ssh` 且无法替你登录 GitHub，  
+> 因此「生成密钥 / 登录 GitHub / 建仓库」这几步需要你在**自己电脑的终端**里完成。  
 > 下面的命令直接复制粘贴运行即可。
 
 ---
@@ -22,7 +22,7 @@ cat ~/.ssh/id_ed25519.pub
 
 ## 第二步：把公钥加到 GitHub
 
-1. 浏览器打开 https://github.com → 登录
+1. 浏览器打开 <https://github.com> → 登录
 2. 右上角头像 → **Settings** → 左侧 **SSH and GPG keys**
 3. 点 **New SSH key** → Title 填 `ai-daily` → 把刚才复制的公钥粘贴进 Key 框 → **Add SSH key**
 
@@ -61,10 +61,11 @@ https://你的用户名.github.io/ai-daily/
 
 ## 之后每天
 
-自动化任务（每天 08:00）会自动：检索新闻 → 生成 md → 跑 `generate.py` 出网页 →
+自动化任务（每天 08:00）会自动：检索新闻 → 生成 md → 跑 `generate.py` 出网页 →  
 `git push` 到该仓库 → GitHub Pages 刷新。你**无需再做任何事**，书签永远是最新。
 
 ### 手动补推（可选）
+
 若某天想手动更新，在终端运行站点目录下的脚本：
 
 ```bash
