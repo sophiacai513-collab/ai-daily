@@ -82,7 +82,7 @@ def parse_md(path: str):
                 if cur_entry is not None:
                     cur_entries.append(cur_entry)
                 cur_entry = {
-                    "title": line[4:].strip(),
+                    "title": re.sub(r'^(?:\d+|[A-Za-z])\.\s*', '', line[4:].strip()),
                     "summary": "",
                     "source": "",
                     "time": "",
@@ -164,7 +164,7 @@ def render_brief(date: str, meta: str, sections: list, sources: list, is_index: 
         out.append(
             '    <div class="digest" id="digest">\n'
             '      <div class="digest-title">速览清单 · 点击跳转到详情</div>\n'
-            '      <ol>\n' + "\n".join(items) + "\n      </ol>\n"
+            '      <ul>\n' + "\n".join(items) + "\n      </ul>\n"
             "    </div>"
         )
 
@@ -217,6 +217,55 @@ def page_shell(date: str, meta: str, inner: str, is_index: bool) -> str:
 {inner}
 </main>
 <div class="foot">由 WorkBuddy 自动生成 · 每日 08:00 更新</div>
+<button class="to-top" id="toTop" type="button" aria-label="回到顶部">&#8593;</button>
+<script>
+(function(){{
+  function findAnchor(node){{
+    node = node && node.nodeType !== 1 ? node.parentNode : node;
+    while(node && node !== document){{
+      if(node.tagName === 'A'){{
+        var href = node.getAttribute('href') || '';
+        if(href.charAt(0) === '#') return node;
+      }}
+      node = node.parentNode;
+    }}
+    return null;
+  }}
+  function offset(){{
+    var tb = document.querySelector('.topbar');
+    var cn = document.querySelector('.cat-nav');
+    var h = tb ? tb.offsetHeight : 0;
+    if(cn) h += cn.offsetHeight;
+    return h + 10;
+  }}
+  document.addEventListener('click', function(e){{
+    var a = findAnchor(e.target);
+    if(!a) return;
+    var href = a.getAttribute('href');
+    var id = href.slice(1);
+    if(!id) return;
+    var el = document.getElementById(id);
+    if(!el) return;
+    e.preventDefault();
+    var top = el.getBoundingClientRect().top + (window.pageYOffset || window.scrollY) - offset();
+    if(window.scrollTo){{ window.scrollTo({{top: Math.max(0, top), behavior: 'smooth'}}); }}
+    else {{ window.scrollTo(0, Math.max(0, top)); }}
+  }});
+  var btn = document.getElementById('toTop');
+  if(btn){{
+    function onScroll(){{
+      if((window.pageYOffset || window.scrollY) > 400) btn.className = 'to-top show';
+      else btn.className = 'to-top';
+    }}
+    window.addEventListener('scroll', onScroll, false);
+    btn.addEventListener('click', function(){{
+      if(window.scrollTo) window.scrollTo({{top: 0, behavior: 'smooth'}});
+      else window.scrollTo(0, 0);
+    }});
+    onScroll();
+  }}
+}})();
+</script>
 </body>
 </html>
 """
