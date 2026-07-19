@@ -79,17 +79,17 @@ body {
 .digest li { border-top: 1px solid var(--line); }
 .digest li:first-child { border-top: none; }
 .digest a {
-  display: flex; align-items: center; gap: 9px;
+  display: flex; align-items: flex-start; gap: 9px;
   padding: 8px 2px; text-decoration: none; color: var(--ink);
 }
 .digest a:active { background: var(--brand-soft); border-radius: 8px; }
 .digest .t {
-  font-size: 13px; line-height: 1.45;
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-size: 13px; line-height: 1.5;
+  white-space: normal; word-break: break-word;
 }
 .digest .dot {
   flex: none; width: 8px; height: 8px; border-radius: 50%;
-  background: var(--ink-faint);
+  background: var(--ink-faint); margin-top: 6px;
 }
 .digest .dot.product { background: var(--product); }
 .digest .dot.tech { background: var(--tech); }

@@ -158,7 +158,9 @@
     for(var i=0;i<tabs.length;i++){ tabs[i].className = tabs[i].className.replace(/\s*active/g, ''); }
     a.className += ' active';
   }
+  var lockUntil = 0;
   function updateActiveTab(){
+    if(Date.now() < lockUntil) return;
     var tabs = document.querySelectorAll('.cat-nav a:not(.nav-archive)');
     if(!tabs.length) return;
     var off = offset();
@@ -171,6 +173,12 @@
     for(var j=0;j<tabs.length;j++){ tabs[j].className = tabs[j].className.replace(/\s*active/g, ''); }
     (current || tabs[0]).className += ' active';
   }
+  function activateTabById(id){
+    var tabs = document.querySelectorAll('.cat-nav a:not(.nav-archive)');
+    for(var i=0;i<tabs.length;i++){
+      if(tabs[i].getAttribute('href') === '#' + id){ setActiveTab(tabs[i]); return; }
+    }
+  }
   document.addEventListener('click', function(e){
     var a = findAnchor(e.target);
     if(!a) return;
@@ -180,10 +188,17 @@
     var el = document.getElementById(id);
     if(!el) return;
     e.preventDefault();
+    // 立即高亮：分类 tab 直接高亮自己；速览清单条目则高亮其所属分类 tab
+    lockUntil = Date.now() + 800;
+    if(a.parentNode && a.parentNode.className.indexOf('cat-nav') !== -1){
+      setActiveTab(a);
+    } else {
+      var sec = el.closest ? el.closest('.section') : null;
+      if(sec && sec.id && sec.id.indexOf('cat-') === 0){ activateTabById(sec.id); }
+    }
     var top = el.getBoundingClientRect().top + (window.pageYOffset || window.scrollY) - offset();
     if(window.scrollTo){ window.scrollTo({top: Math.max(0, top), behavior: 'smooth'}); }
     else { window.scrollTo(0, Math.max(0, top)); }
-    setActiveTab(a);
   });
   var btn = document.getElementById('toTop');
   if(btn){
