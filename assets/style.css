@@ -1,0 +1,114 @@
+:root {
+  --bg: #f5f6f8;
+  --card: #ffffff;
+  --ink: #1d2129;
+  --ink-soft: #4e5969;
+  --ink-faint: #86909c;
+  --line: #e5e6eb;
+  --brand: #2f6bff;
+  --brand-soft: #eef3ff;
+  --product: #2f6bff;
+  --tech: #7c3aed;
+  --biz: #0fb36b;
+  --verify: #d97706;
+  --shadow: 0 1px 3px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.04);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  padding: 0 0 56px;
+}
+
+.wrap { max-width: 720px; margin: 0 auto; padding: 0 16px; }
+
+/* Header */
+.site-header {
+  background: linear-gradient(135deg, #2f6bff 0%, #7c3aed 100%);
+  color: #fff;
+  padding: 28px 0 24px;
+  margin-bottom: 20px;
+}
+.site-header .wrap { padding: 0 16px; }
+.site-header h1 { font-size: 22px; font-weight: 700; letter-spacing: .5px; }
+.site-header .sub { font-size: 13px; opacity: .88; margin-top: 6px; }
+.site-header .date-badge {
+  display: inline-block; margin-top: 12px;
+  background: rgba(255,255,255,.18); border-radius: 999px;
+  padding: 4px 12px; font-size: 13px; font-weight: 600;
+}
+
+/* Category nav */
+.cat-nav { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 22px; }
+.cat-nav a {
+  font-size: 13px; color: var(--ink-soft); text-decoration: none;
+  background: var(--card); border: 1px solid var(--line);
+  padding: 6px 12px; border-radius: 999px;
+}
+.cat-nav a:active { background: var(--brand-soft); }
+
+/* Section */
+.section { margin-bottom: 30px; }
+.section-title {
+  font-size: 17px; font-weight: 700; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-title::before {
+  content: ""; width: 4px; height: 18px; border-radius: 2px; background: var(--brand);
+}
+.section.product .section-title::before { background: var(--product); }
+.section.tech .section-title::before { background: var(--tech); }
+.section.biz .section-title::before { background: var(--biz); }
+.section.verify .section-title::before { background: var(--verify); }
+
+/* Card */
+.card {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: 14px; padding: 16px 16px 14px; margin-bottom: 12px;
+  box-shadow: var(--shadow);
+}
+.card h3 { font-size: 16px; font-weight: 700; line-height: 1.45; margin-bottom: 8px; }
+.card .summary { font-size: 14.5px; color: var(--ink-soft); margin-bottom: 10px; }
+.card .meta { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--ink-faint); }
+.card .meta b { color: var(--ink-soft); font-weight: 600; }
+.card .link { display: inline-block; margin-top: 8px; font-size: 13px; color: var(--brand); text-decoration: none; word-break: break-all; }
+.card .link::after { content: " ↗"; }
+
+/* Archive list */
+.archive { margin-top: 8px; }
+.archive h2 { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+.archive ul { list-style: none; }
+.archive li {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: 10px; margin-bottom: 8px;
+}
+.archive a {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 14px; text-decoration: none; color: var(--ink); font-size: 14.5px;
+}
+.archive a .d { color: var(--ink-faint); font-size: 12.5px; }
+.archive li:active { background: var(--brand-soft); }
+
+/* Source list */
+.sources { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+.sources h2 { font-size: 15px; font-weight: 700; margin-bottom: 10px; }
+.sources ol { padding-left: 20px; }
+.sources li { font-size: 13px; margin-bottom: 6px; }
+.sources a { color: var(--brand); text-decoration: none; word-break: break-all; }
+
+.foot { text-align: center; color: var(--ink-faint); font-size: 12px; margin-top: 28px; }
+
+/* Back to top / home */
+.topbar { position: sticky; top: 0; z-index: 10; background: rgba(245,246,248,.9); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+.topbar .wrap { display: flex; align-items: center; justify-content: space-between; height: 48px; }
+.topbar .brand { font-weight: 700; font-size: 15px; color: var(--brand); text-decoration: none; }
+.topbar .home { font-size: 13px; color: var(--ink-soft); text-decoration: none; }
+
+@media (min-width: 640px) {
+  .site-header h1 { font-size: 26px; }
+}
