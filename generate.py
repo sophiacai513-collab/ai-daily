@@ -131,13 +131,15 @@ def render_entry(e: dict) -> str:
       </div>"""
 
 
-def render_brief(date: str, meta: str, sections: list, sources: list) -> str:
+def render_brief(date: str, meta: str, sections: list, sources: list, is_index: bool = True) -> str:
     out = []
     # category nav
     cats = [s[0] for s in sections]
     nav = "".join(
         f'<a href="#cat-{esc(c)}">{CAT_LABEL.get(c, c)}</a>' for c in cats
     )
+    archive_href = "#archive" if is_index else "index.html#archive"
+    nav += f'<a class="nav-archive" href="{archive_href}">往期</a>'
     out.append(f'    <nav class="cat-nav">{nav}</nav>')
 
     for idx, (name, entries) in enumerate(sections):
@@ -211,12 +213,14 @@ def build_archive(site_dir: str, latest_date: str) -> str:
             f'      <li><a href="{d}.html"><span>简报</span>'
             f'<span class="d">{d}</span></a></li>'
         )
-    if not items:
-        return ""
+    if items:
+        body = "\n".join(items)
+    else:
+        body = '      <li class="empty">暂无往期简报，每日 08:00 自动累积</li>'
     return (
-        '    <section class="archive">\n'
+        '    <section class="archive" id="archive">\n'
         "      <h2>往期回顾</h2>\n      <ul>\n"
-        + "\n".join(items)
+        + body
         + "\n      </ul>\n    </section>"
     )
 
@@ -231,15 +235,16 @@ def main():
 
     date, meta, sections, sources = parse_md(md_path)
 
-    # dated page
-    inner = render_brief(date, meta, sections, sources)
-    dated_html = page_shell(date, meta, inner, is_index=False)
+    # dated page (its "往期" link points to index.html#archive)
+    inner_dated = render_brief(date, meta, sections, sources, is_index=False)
+    dated_html = page_shell(date, meta, inner_dated, is_index=False)
     with open(os.path.join(site_dir, f"{date}.html"), "w", encoding="utf-8") as f:
         f.write(dated_html)
 
-    # index (latest + archive)
+    # index (latest + always-visible archive section)
+    inner_index = render_brief(date, meta, sections, sources, is_index=True)
     archive_html = build_archive(site_dir, date)
-    index_inner = inner + "\n" + archive_html if archive_html else inner
+    index_inner = inner_index + "\n" + archive_html
     index_html = page_shell(date, meta, index_inner, is_index=True)
     with open(os.path.join(site_dir, "index.html"), "w", encoding="utf-8") as f:
         f.write(index_html)
