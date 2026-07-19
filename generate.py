@@ -195,13 +195,14 @@ def render_brief(date: str, meta: str, sections: list, sources: list, is_index: 
 def page_shell(date: str, meta: str, inner: str, is_index: bool) -> str:
     home_link = "" if is_index else '<a class="home" href="index.html">← 返回首页</a>'
     brand_href = "index.html" if not is_index else "index.html"
+    ver = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     return f"""<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>每日 AI 行业简报 {date}</title>
-<link rel="stylesheet" href="assets/style.css?v={date.replace('-', '')}">
+<link rel="stylesheet" href="assets/style.css?v={ver}">
 </head>
 <body>
 <div class="topbar"><div class="wrap">
