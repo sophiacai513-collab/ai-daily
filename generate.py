@@ -109,7 +109,7 @@ def parse_md(path: str):
     return date, meta, sections, sources
 
 
-def render_entry(e: dict) -> str:
+def render_entry(e: dict, idx: int) -> str:
     link = e["link"]
     link_html = (
         f'<a class="link" href="{esc(link)}" target="_blank" rel="noopener">'
@@ -123,7 +123,7 @@ def render_entry(e: dict) -> str:
     if e["time"]:
         meta_parts.append(f"<b>时间</b> {esc(e['time'])}")
     meta_html = f'<div class="meta">{" · ".join(meta_parts)}</div>' if meta_parts else ""
-    return f"""      <div class="card">
+    return f"""      <div class="card" id="item-{idx}">
         <h3>{esc(e['title'])}</h3>
         <div class="summary">{esc(e['summary'])}</div>
         {meta_html}
@@ -142,10 +142,36 @@ def render_brief(date: str, meta: str, sections: list, sources: list, is_index: 
     nav += f'<a class="nav-archive" href="{archive_href}">往期</a>'
     out.append(f'    <nav class="cat-nav">{nav}</nav>')
 
-    for idx, (name, entries) in enumerate(sections):
+    # flat list with a global index (for digest links + card anchors)
+    flat = []
+    gi = 0
+    for name, entries in sections:
+        for e in entries:
+            gi += 1
+            flat.append((name, e, gi))
+    idx_of = {id(e): gi for name, e, gi in flat}
+
+    # digest overview list: one-line headline per item, click jumps to detail
+    if flat:
+        items = []
+        for name, e, gi in flat:
+            cls = CAT_CLASS.get(name, "")
+            items.append(
+                f'      <li><a href="#item-{gi}">'
+                f'<span class="dot {cls}"></span>'
+                f'<span class="t">{esc(e["title"])}</span></a></li>'
+            )
+        out.append(
+            '    <div class="digest" id="digest">\n'
+            '      <div class="digest-title">速览清单 · 点击跳转到详情</div>\n'
+            '      <ol>\n' + "\n".join(items) + "\n      </ol>\n"
+            "    </div>"
+        )
+
+    for name, entries in sections:
         cls = CAT_CLASS.get(name, "")
         label = CAT_LABEL.get(name, name)
-        cards = "\n".join(render_entry(e) for e in entries)
+        cards = "\n".join(render_entry(e, idx_of[id(e)]) for e in entries)
         out.append(
             f'    <section class="section {cls}" id="cat-{esc(name)}">\n'
             f'      <div class="section-title">{label}</div>\n{cards}\n'

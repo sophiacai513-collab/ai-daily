@@ -62,8 +62,39 @@ body {
   background: var(--brand-soft); font-weight: 600;
 }
 
+/* Digest overview list (below tabs) */
+.digest {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: 14px; padding: 14px 14px 6px; margin: 4px 0 22px;
+  box-shadow: var(--shadow);
+}
+.digest-title {
+  font-size: 13px; font-weight: 700; color: var(--ink-soft);
+  margin-bottom: 8px; padding-left: 2px;
+}
+.digest ol { list-style: none; counter-reset: dg; }
+.digest li { border-top: 1px solid var(--line); }
+.digest li:first-child { border-top: none; }
+.digest a {
+  display: flex; align-items: center; gap: 9px;
+  padding: 9px 2px; text-decoration: none; color: var(--ink);
+}
+.digest a:active { background: var(--brand-soft); border-radius: 8px; }
+.digest .t {
+  font-size: 13.5px; line-height: 1.4;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.digest .dot {
+  flex: none; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--ink-faint);
+}
+.digest .dot.product { background: var(--product); }
+.digest .dot.tech { background: var(--tech); }
+.digest .dot.biz { background: var(--biz); }
+.digest .dot.verify { background: var(--verify); }
+
 /* Section */
-.section { margin-bottom: 30px; }
+.section { margin-bottom: 30px; scroll-margin-top: 104px; }
 .section-title {
   font-size: 17px; font-weight: 700; margin-bottom: 14px;
   display: flex; align-items: center; gap: 8px;
@@ -80,7 +111,7 @@ body {
 .card {
   background: var(--card); border: 1px solid var(--line);
   border-radius: 14px; padding: 16px 16px 14px; margin-bottom: 12px;
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow); scroll-margin-top: 104px;
 }
 .card h3 { font-size: 16px; font-weight: 700; line-height: 1.45; margin-bottom: 8px; }
 .card .summary { font-size: 14.5px; color: var(--ink-soft); margin-bottom: 10px; }
@@ -90,7 +121,7 @@ body {
 .card .link::after { content: " ↗"; }
 
 /* Archive list */
-.archive { margin-top: 8px; }
+.archive { margin-top: 8px; scroll-margin-top: 104px; }
 .archive h2 { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
 
 /* Search box */
