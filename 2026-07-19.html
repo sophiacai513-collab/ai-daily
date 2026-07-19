@@ -150,6 +150,27 @@
     if(cn) h += cn.offsetHeight;
     return h + 10;
   }
+  function setActiveTab(a){
+    if(!a || a.className.indexOf('nav-archive') !== -1) return;
+    var parent = a.parentNode;
+    if(!parent || parent.className.indexOf('cat-nav') === -1) return;
+    var tabs = parent.querySelectorAll('a:not(.nav-archive)');
+    for(var i=0;i<tabs.length;i++){ tabs[i].className = tabs[i].className.replace(/\s*active/g, ''); }
+    a.className += ' active';
+  }
+  function updateActiveTab(){
+    var tabs = document.querySelectorAll('.cat-nav a:not(.nav-archive)');
+    if(!tabs.length) return;
+    var off = offset();
+    var current = null;
+    for(var i=0;i<tabs.length;i++){
+      var id = tabs[i].getAttribute('href').slice(1);
+      var el = document.getElementById(id);
+      if(el && el.getBoundingClientRect().top - off <= 2) current = tabs[i];
+    }
+    for(var j=0;j<tabs.length;j++){ tabs[j].className = tabs[j].className.replace(/\s*active/g, ''); }
+    (current || tabs[0]).className += ' active';
+  }
   document.addEventListener('click', function(e){
     var a = findAnchor(e.target);
     if(!a) return;
@@ -162,6 +183,7 @@
     var top = el.getBoundingClientRect().top + (window.pageYOffset || window.scrollY) - offset();
     if(window.scrollTo){ window.scrollTo({top: Math.max(0, top), behavior: 'smooth'}); }
     else { window.scrollTo(0, Math.max(0, top)); }
+    setActiveTab(a);
   });
   var btn = document.getElementById('toTop');
   if(btn){
@@ -169,6 +191,7 @@
       var oneScreen = window.innerHeight || 600;
       if((window.pageYOffset || window.scrollY) > oneScreen) btn.className = 'to-top show';
       else btn.className = 'to-top';
+      updateActiveTab();
     }
     window.addEventListener('scroll', onScroll, false);
     btn.addEventListener('click', function(){

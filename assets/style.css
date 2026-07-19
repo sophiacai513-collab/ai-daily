@@ -61,6 +61,9 @@ body {
   color: var(--brand); border-color: var(--brand);
   background: var(--brand-soft); font-weight: 600;
 }
+.cat-nav a.active {
+  color: #fff; background: var(--brand); border-color: var(--brand); font-weight: 600;
+}
 
 /* Digest overview list (below tabs) */
 .digest {
