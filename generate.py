@@ -201,7 +201,7 @@ def page_shell(date: str, meta: str, inner: str, is_index: bool) -> str:
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>每日 AI 行业简报 {date}</title>
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v={date.replace('-', '')}">
 </head>
 <body>
 <div class="topbar"><div class="wrap">
