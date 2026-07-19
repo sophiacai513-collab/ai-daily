@@ -254,7 +254,8 @@ def page_shell(date: str, meta: str, inner: str, is_index: bool) -> str:
   var btn = document.getElementById('toTop');
   if(btn){{
     function onScroll(){{
-      if((window.pageYOffset || window.scrollY) > 400) btn.className = 'to-top show';
+      var oneScreen = window.innerHeight || 600;
+      if((window.pageYOffset || window.scrollY) > oneScreen) btn.className = 'to-top show';
       else btn.className = 'to-top';
     }}
     window.addEventListener('scroll', onScroll, false);
