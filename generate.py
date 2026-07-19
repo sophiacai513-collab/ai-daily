@@ -196,32 +196,119 @@ def page_shell(date: str, meta: str, inner: str, is_index: bool) -> str:
 """
 
 
+SEARCH_SCRIPT = """    <script>
+    (function(){
+      var inp = document.getElementById('archive-search');
+      if(!inp) return;
+      var groups = document.querySelectorAll('.archive-list > li.month-group');
+      inp.addEventListener('input', function(){
+        var q = inp.value.trim().toLowerCase();
+        groups.forEach(function(g){
+          var lis = g.querySelectorAll('ul > li[data-search]');
+          var vis = 0;
+          lis.forEach(function(li){
+            var s = (li.getAttribute('data-search')||'').toLowerCase();
+            var hit = !q || s.indexOf(q) !== -1;
+            li.style.display = hit ? '' : 'none';
+            if(hit) vis++;
+          });
+          g.style.display = vis ? '' : 'none';
+        });
+      });
+    })();
+    </script>"""
+
+
+def extract_headlines(html_path: str) -> list:
+    try:
+        with open(html_path, encoding="utf-8") as f:
+            html = f.read()
+    except Exception:
+        return []
+    titles = re.findall(r'<div class="card">\s*<h3>(.*?)</h3>', html, re.S)
+    clean = []
+    for t in titles:
+        t = re.sub(r"<.*?>", "", t)
+        t = t.replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">")
+        t = t.strip()
+        if t:
+            clean.append(t)
+    return clean
+
+
 def build_archive(site_dir: str, latest_date: str) -> str:
     files = glob.glob(os.path.join(site_dir, "????-??-??.html"))
-    dates = []
+    items = []
     for f in files:
         base = os.path.basename(f)
         d = base[:-5]
-        if re.match(r"^\d{4}-\d{2}-\d{2}$", d):
-            dates.append(d)
-    dates = sorted(set(dates), reverse=True)
-    items = []
-    for d in dates:
+        if not re.match(r"^\d{4}-\d{2}-\d{2}$", d):
+            continue
         if d == latest_date:
             continue
-        items.append(
-            f'      <li><a href="{d}.html"><span>简报</span>'
-            f'<span class="d">{d}</span></a></li>'
+        headlines = extract_headlines(f)
+        search = (d + " " + " ".join(headlines)).lower()
+        items.append({
+            "date": d,
+            "month": d[:7],
+            "search": search,
+            "preview": headlines[0] if headlines else "",
+        })
+    items.sort(key=lambda x: x["date"], reverse=True)
+
+    if not items:
+        return (
+            '    <section class="archive" id="archive">\n'
+            '      <h2>往期回顾</h2>\n'
+            '      <ul class="archive-list">\n'
+            '        <li class="empty">暂无往期简报，每日 08:00 自动累积</li>\n'
+            "      </ul>\n    </section>"
         )
-    if items:
-        body = "\n".join(items)
-    else:
-        body = '      <li class="empty">暂无往期简报，每日 08:00 自动累积</li>'
+
+    # group by month, newest first
+    groups = {}
+    for it in items:
+        groups.setdefault(it["month"], []).append(it)
+    months = sorted(groups.keys(), reverse=True)
+
+    parts = []
+    for m in months:
+        y, mo = m.split("-")
+        label = f"{y}年{int(mo)}月"
+        lis = []
+        for it in groups[m]:
+            preview_html = (
+                f'<span class="preview">{esc(it["preview"])}</span>'
+                if it["preview"]
+                else ""
+            )
+            lis.append(
+                f'        <li data-search="{esc(it["search"])}">'
+                f'<a href="{it["date"]}.html">'
+                f'<span class="d">{it["date"]}</span>'
+                f'{preview_html}</a></li>'
+            )
+        parts.append(
+            f'        <li class="month-group" data-month="{m}">\n'
+            f'          <div class="month-label">{label}</div>\n'
+            "          <ul>\n" + "\n".join(lis) + "\n          </ul>\n"
+            "        </li>"
+        )
+    body = "\n".join(parts)
+
     return (
         '    <section class="archive" id="archive">\n'
-        "      <h2>往期回顾</h2>\n      <ul>\n"
+        '      <h2>往期回顾</h2>\n'
+        '      <div class="search-box">\n'
+        '        <input id="archive-search" type="search" '
+        'placeholder="搜索日期或关键词，如 Grok、2026-07" '
+        'autocomplete="off" aria-label="搜索往期简报">\n'
+        "      </div>\n"
+        '      <ul class="archive-list">\n'
         + body
-        + "\n      </ul>\n    </section>"
+        + "\n      </ul>\n"
+        + SEARCH_SCRIPT
+        + "\n    </section>"
     )
 
 
