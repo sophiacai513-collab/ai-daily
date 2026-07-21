@@ -9,7 +9,7 @@
 <body>
 <div class="topbar"><div class="wrap">
   <a class="brand" href="index.html">AI 行业简报</a>
-  
+  <a class="home" href="index.html">← 返回首页</a>
 </div></div>
 <header class="site-header"><div class="wrap">
   <h1>每日 AI 行业简报</h1>
@@ -17,7 +17,7 @@
   <div class="date-badge">2026-07-22</div>
 </div></header>
 <main class="wrap">
-    <nav class="cat-nav"><a href="#cat-产品">产品</a><a href="#cat-技术">技术</a><a href="#cat-商业">商业</a><a href="#cat-待核验">待核验</a><a class="nav-archive" href="#archive">往期</a></nav>
+    <nav class="cat-nav"><a href="#cat-产品">产品</a><a href="#cat-技术">技术</a><a href="#cat-商业">商业</a><a href="#cat-待核验">待核验</a><a class="nav-archive" href="index.html#archive">往期</a></nav>
     <div class="digest" id="digest">
       <div class="digest-title">速览清单 · 点击跳转到详情</div>
       <ul>
@@ -127,42 +127,6 @@
         <li><a href="https://news.bms.com/news/corporate-financial/2026/Bristol-Myers-Squibb-to-Build-the-Most-Powerful-AI-Factory-in-Life-Sciences-with-NVIDIA/default.aspx" target="_blank" rel="noopener">BMS 官网 - 生命科学 AI 工厂</a></li>
         <li><a href="https://mp.weixin.qq.com/s?__biz=Mzk0OTYzOTUxOA==&amp;mid=2247486779&amp;idx=1&amp;sn=0781f3db48f68e285de02b91ed6548e5" target="_blank" rel="noopener">微信公众号 - 美财长审查中国开源模型（待核验）</a></li>
       </ol>
-    </section>
-    <section class="archive" id="archive">
-      <h2>往期回顾</h2>
-      <div class="search-box">
-        <input id="archive-search" type="search" placeholder="搜索日期或关键词，如 Grok、2026-07" autocomplete="off" aria-label="搜索往期简报">
-      </div>
-      <ul class="archive-list">
-        <li class="month-group" data-month="2026-07">
-          <div class="month-label">2026年7月</div>
-          <ul>
-        <li data-search="2026-07-21 "><a href="2026-07-21.html"><span class="d">2026-07-21</span></a></li>
-        <li data-search="2026-07-19 "><a href="2026-07-19.html"><span class="d">2026-07-19</span></a></li>
-          </ul>
-        </li>
-      </ul>
-    <script>
-    (function(){
-      var inp = document.getElementById('archive-search');
-      if(!inp) return;
-      var groups = document.querySelectorAll('.archive-list > li.month-group');
-      inp.addEventListener('input', function(){
-        var q = inp.value.trim().toLowerCase();
-        groups.forEach(function(g){
-          var lis = g.querySelectorAll('ul > li[data-search]');
-          var vis = 0;
-          lis.forEach(function(li){
-            var s = (li.getAttribute('data-search')||'').toLowerCase();
-            var hit = !q || s.indexOf(q) !== -1;
-            li.style.display = hit ? '' : 'none';
-            if(hit) vis++;
-          });
-          g.style.display = vis ? '' : 'none';
-        });
-      });
-    })();
-    </script>
     </section>
 </main>
 <div class="foot">由 WorkBuddy 自动生成 · 每日 08:00 更新</div>
